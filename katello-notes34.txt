@@ -1,0 +1,99 @@
+root@katello# vim /root/.hammer/cli.modules.d/foreman.yml
+root@katello# hammer organization list
+---|----------------------|-------------|----------------------|------------
+ID | NAME                 | DESCRIPTION | LABEL                | DESCRIPTION
+---|----------------------|-------------|----------------------|------------
+1  | Default Organization |             | Default_Organization |
+3  | MSA                  | MSA ORG     | MSA                  | MSA ORG
+---|----------------------|-------------|----------------------|------------
+root@katello#
+
+
+
+t@katello# hammer sync-plan list --organization "MSA"
+---|--------------------|---------------------|----------|--------
+ID | NAME               | START DATE          | INTERVAL | ENABLED
+---|--------------------|---------------------|----------|--------
+1  | Centos_7_Sync_Plan | 2018/10/01 05:30:00 | weekly   | yes
+---|--------------------|---------------------|----------|--------
+root@katello#
+
+
+t@katello#  hammer product list --organization "MSA"
+---|----------|----------------|--------------|--------------|------------------
+ID | NAME     | DESCRIPTION    | ORGANIZATION | REPOSITORIES | SYNC STATE
+---|----------|----------------|--------------|--------------|------------------
+1  | CentOS 7 | Sync Base Repo | MSA          | 3            | Syncing Complete.
+---|----------|----------------|--------------|--------------|------------------
+root@katello#
+
+
+root@katello#  hammer gpg list --order ID --organization=MSA
+---|-----------------
+ID | NAME
+---|-----------------
+1  | Centos_7_GPG_Key
+---|-----------------
+root@katello#
+
+root@katello# hammer repository list --order ID
+---|----------------|----------|--------------|----------------------------------------------------
+ID | NAME           | PRODUCT  | CONTENT TYPE | URL
+---|----------------|----------|--------------|----------------------------------------------------
+2  | Extras_x86_64  | CentOS 7 | yum          | http://mirror.centos.org/centos-7/7/extras/x86_64/
+1  | OS_x86_64      | CentOS 7 | yum          | http://mirror.centos.org/centos-7/7/os/x86_64/
+3  | Updates_x86_64 | CentOS 7 | yum          | http://mirror.centos.org/centos-7/7/updates/x86_64/
+---|----------------|----------|--------------|----------------------------------------------------
+root@katello#
+
+
+t@katello# hammer product list  --organization "MSA"
+---|----------|----------------|--------------|--------------|------------------
+ID | NAME     | DESCRIPTION    | ORGANIZATION | REPOSITORIES | SYNC STATE
+---|----------|----------------|--------------|--------------|------------------
+1  | CentOS 7 | Sync Base Repo | MSA          | 3            | Syncing Complete.
+---|----------|----------------|--------------|--------------|------------------
+root@katello#
+
+
+t@katello#  hammer lifecycle-environment list
+---|----------------|--------
+ID | NAME           | PRIOR
+---|----------------|--------
+2  | Library        |
+1  | Library        |
+3  | Non Production | Library
+4  | Production     | Library
+---|----------------|--------
+root@katello#
+
+
+t@katello# hammer content-view version list
+---|-------------------------------|---------|------------------------
+ID | NAME                          | VERSION | LIFECYCLE ENVIRONMENTS
+---|-------------------------------|---------|------------------------
+4  | CentOS content view 2.0       | 2.0     | Library, Non Production
+3  | CentOS content view 1.0       | 1.0     | Production
+2  | Default Organization View 1.0 | 1.0     | Library
+1  | Default Organization View 1.0 | 1.0     | Library
+---|-------------------------------|---------|------------------------
+root@katello#
+
+
+t@katello# hammer activation-key list --organization=MSA
+---|-------------------|----------------|-----------------------|--------------------
+ID | NAME              | HOST LIMIT     | LIFECYCLE ENVIRONMENT | CONTENT VIEW
+---|-------------------|----------------|-----------------------|--------------------
+1  | Centos_7_Prod_key | 1 of Unlimited | Production            | CentOS content view
+---|-------------------|----------------|-----------------------|--------------------
+root@katello#
+
+
+t@katello# hammer subscription list --organization=MSA
+---|----------------------------------|----------|----------|----------|---------|---------|---------------------|-----------|---------
+ID | UUID                             | NAME     | TYPE     | CONTRACT | ACCOUNT | SUPPORT | END DATE            | QUANTITY  | CONSUMED
+---|----------------------------------|----------|----------|----------|---------|---------|---------------------|-----------|---------
+1  | 402808cd6618a286016618b4ecac0006 | CentOS 7 | Physical |          |         |         | 2048/09/19 01:46:41 | Unlimited | 1
+---|----------------------------------|----------|----------|----------|---------|---------|---------------------|-----------|---------
+
+
