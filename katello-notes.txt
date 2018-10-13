@@ -50,4 +50,106 @@ ID | NAME            | START DATE          | INTERVAL | ENABLED
 ---|-----------------|---------------------|----------|--------
 [root@sat6 katello38]#
 
+@##################3
+ hammer product create   --name "el7_repos"   --description "Various repositories to use with CentOS 7"  --organization=Surrey
+Product created.
+
+[root@sat6 katello38]# hammer product list --organization "Surrey"
+---|-----------|-------------------------------------------|--------------|--------------|-----------
+ID | NAME      | DESCRIPTION                               | ORGANIZATION | REPOSITORIES | SYNC STATE
+---|-----------|-------------------------------------------|--------------|--------------|-----------
+1  | el7_repos | Various repositories to use with CentOS 7 | Surrey       | 0            |
+---|-----------|-------------------------------------------|--------------|--------------|-----------
+[root@sat6 katello38]#
+
+
+[root@sat6 katello38]# mkdir /etc/pki/rpm-gpg/import/
+[root@sat6 katello38]# cd /etc/pki/rpm-gpg/import/
+[root@sat6 import]# wget http://mirror.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7
+--2018-10-13 08:25:06--  http://mirror.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7
+Resolving mirror.centos.org (mirror.centos.org)... 64.251.25.238, 2607:f7c0:1:ea30:4527:5180:0:19
+Connecting to mirror.centos.org (mirror.centos.org)|64.251.25.238|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1690 (1.7K)
+Saving to: ‘RPM-GPG-KEY-CentOS-7’
+
+100%[========================================================================================================================>] 1,690       --.-K/s   in 0s
+
+2018-10-13 08:25:07 (107 MB/s) - ‘RPM-GPG-KEY-CentOS-7’ saved [1690/1690]
+
+[root@sat6 import]# ls
+RPM-GPG-KEY-CentOS-7
+[root@sat6 import]#
+
+[root@sat6 import]# cat RPM-GPG-KEY-CentOS-7
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+
+mQINBFOn/0sBEADLDyZ+DQHkcTHDQSE0a0B2iYAEXwpPvs67cJ4tmhe/iMOyVMh9
+Yw/vBIF8scm6T/vPN5fopsKiW9UsAhGKg0epC6y5ed+NAUHTEa6pSOdo7CyFDwtn
+4HF61Esyb4gzPT6QiSr0zvdTtgYBRZjAEPFVu3Dio0oZ5UQZ7fzdZfeixMQ8VMTQ
+4y4x5vik9B+cqmGiq9AW71ixlDYVWasgR093fXiD9NLT4DTtK+KLGYNjJ8eMRqfZ
+Ws7g7C+9aEGHfsGZ/SxLOumx/GfiTloal0dnq8TC7XQ/JuNdB9qjoXzRF+faDUsj
+WuvNSQEqUXW1dzJjBvroEvgTdfCJfRpIgOrc256qvDMp1SxchMFltPlo5mbSMKu1
+x1p4UkAzx543meMlRXOgx2/hnBm6H6L0FsSyDS6P224yF+30eeODD4Ju4BCyQ0jO
+IpUxmUnApo/m0eRelI6TRl7jK6aGqSYUNhFBuFxSPKgKYBpFhVzRM63Jsvib82rY
+438q3sIOUdxZY6pvMOWRkdUVoz7WBExTdx5NtGX4kdW5QtcQHM+2kht6sBnJsvcB
+JYcYIwAUeA5vdRfwLKuZn6SgAUKdgeOtuf+cPR3/E68LZr784SlokiHLtQkfk98j
+NXm6fJjXwJvwiM2IiFyg8aUwEEDX5U+QOCA0wYrgUQ/h8iathvBJKSc9jQARAQAB
+tEJDZW50T1MtNyBLZXkgKENlbnRPUyA3IE9mZmljaWFsIFNpZ25pbmcgS2V5KSA8
+c2VjdXJpdHlAY2VudG9zLm9yZz6JAjUEEwECAB8FAlOn/0sCGwMGCwkIBwMCBBUC
+CAMDFgIBAh4BAheAAAoJECTGqKf0qA61TN0P/2730Th8cM+d1pEON7n0F1YiyxqG
+QzwpC2Fhr2UIsXpi/lWTXIG6AlRvrajjFhw9HktYjlF4oMG032SnI0XPdmrN29lL
+F+ee1ANdyvtkw4mMu2yQweVxU7Ku4oATPBvWRv+6pCQPTOMe5xPG0ZPjPGNiJ0xw
+4Ns+f5Q6Gqm927oHXpylUQEmuHKsCp3dK/kZaxJOXsmq6syY1gbrLj2Anq0iWWP4
+Tq8WMktUrTcc+zQ2pFR7ovEihK0Rvhmk6/N4+4JwAGijfhejxwNX8T6PCuYs5Jiv
+hQvsI9FdIIlTP4XhFZ4N9ndnEwA4AH7tNBsmB3HEbLqUSmu2Rr8hGiT2Plc4Y9AO
+aliW1kOMsZFYrX39krfRk2n2NXvieQJ/lw318gSGR67uckkz2ZekbCEpj/0mnHWD
+3R6V7m95R6UYqjcw++Q5CtZ2tzmxomZTf42IGIKBbSVmIS75WY+cBULUx3PcZYHD
+ZqAbB0Dl4MbdEH61kOI8EbN/TLl1i077r+9LXR1mOnlC3GLD03+XfY8eEBQf7137
+YSMiW5r/5xwQk7xEcKlbZdmUJp3ZDTQBXT06vavvp3jlkqqH9QOE8ViZZ6aKQLqv
+pL+4bs52jzuGwTMT7gOR5MzD+vT0fVS7Xm8MjOxvZgbHsAgzyFGlI1ggUQmU7lu3
+uPNL0eRx4S1G4Jn5
+=OGYX
+-----END PGP PUBLIC KEY BLOCK-----
+[root@sat6 import]#
+
+[root@sat6 import]# hammer gpg create   --key "RPM-GPG-KEY-CentOS-7"   --name "RPM-GPG-KEY-CentOS-7"   --organization=Surrey
+GPG Key created.
+[root@sat6 import]#
+
+[root@sat6 import]#  wget https://archive.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server
+--2018-10-13 08:32:06--  https://archive.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7Server
+Resolving archive.fedoraproject.org (archive.fedoraproject.org)... 209.132.181.24, 209.132.181.25, 209.132.181.23
+Connecting to archive.fedoraproject.org (archive.fedoraproject.org)|209.132.181.24|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1662 (1.6K)
+Saving to: ‘RPM-GPG-KEY-EPEL-7Server’
+
+100%[========================================================================================================================>] 1,662       --.-K/s   in 0s
+
+2018-10-13 08:32:06 (65.9 MB/s) - ‘RPM-GPG-KEY-EPEL-7Server’ saved [1662/1662]
+
+[root@sat6 import]# ll
+total 8
+-rw-r--r-- 1 root root 1690 Dec  9  2015 RPM-GPG-KEY-CentOS-7
+-rw-r--r-- 1 root root 1662 Jun 20  2014 RPM-GPG-KEY-EPEL-7Server
+[root@sat6 import]#
+
+# hammer gpg create \
+>   --key "RPM-GPG-KEY-EPEL-7Server" \
+>   --name "RPM-GPG-KEY-EPEL-7Server"  --organization=Surrey
+GPG Key created.
+[root@sat6 import]#
+
+
+ot@sat6 import]#  hammer gpg list --order ID --organization=Surrey
+---|-------------------------
+ID | NAME
+---|-------------------------
+1  | RPM-GPG-KEY-CentOS-7
+2  | RPM-GPG-KEY-EPEL-7Server
+---|-------------------------
+[root@sat6 import]#
+
 
