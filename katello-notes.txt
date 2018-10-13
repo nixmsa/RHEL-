@@ -1,1 +1,53 @@
-test
+[root@sat6 katello38]# cat /root/.hammer/cli.modules.d/foreman.yml
+:foreman:
+  # Credentials. You'll be asked for the interactively if you leave them blank here
+#  :username: 'admin'
+#  :password: '3osXJR4VUvAycido'
+
+  :host: 'https://sat6.bc.ca'
+  :username: 'admin'
+  :password: 'tripod001'
+
+
+  # Check API documentation cache status on each request
+  :refresh_cache: false
+
+  # API request timeout in seconds, set -1 for infinity
+  :request_timeout: 120
+[root@sat6 katello38]#
+
+#####
+
+[root@sat6 katello38]# hammer organization list
+---|----------------------|----------------------|------------------------------|----------------------|-----------------------------
+ID | TITLE                | NAME                 | DESCRIPTION                  | LABEL                | DESCRIPTION
+---|----------------------|----------------------|------------------------------|----------------------|-----------------------------
+1  | Default Organization | Default Organization |                              | Default_Organization |
+3  | MSA                  | MSA                  | MSA groups of company canada | MSA                  | MSA groups of company canada
+---|----------------------|----------------------|------------------------------|----------------------|-----------------------------
+[root@sat6 katello38]#
+
+[root@sat6 katello38]# hammer organization list
+---|----------------------|----------------------|------------------------------|----------------------|-----------------------------
+ID | TITLE                | NAME                 | DESCRIPTION                  | LABEL                | DESCRIPTION
+---|----------------------|----------------------|------------------------------|----------------------|-----------------------------
+1  | Default Organization | Default Organization |                              | Default_Organization |
+3  | MSA                  | MSA                  | MSA groups of company canada | MSA                  | MSA groups of company canada
+4  | Surrey               | Surrey               | Surrey BC                    | Surrey               | Surrey BC
+---|----------------------|----------------------|------------------------------|----------------------|-----------------------------
+[root@sat6 katello38]#
+
+
+[root@sat6 katello38]# hammer sync-plan create --name "Daily Sync Plan" --interval daily --enabled true --organization "Surrey" --sync-date "2018-10-13"
+Sync plan created.
+[root@sat6 katello38]#
+
+[root@sat6 katello38]# hammer sync-plan list --organization "Surrey"
+---|-----------------|---------------------|----------|--------
+ID | NAME            | START DATE          | INTERVAL | ENABLED
+---|-----------------|---------------------|----------|--------
+1  | Daily Sync Plan | 2018/10/13 00:00:00 | daily    | yes
+---|-----------------|---------------------|----------|--------
+[root@sat6 katello38]#
+
+
