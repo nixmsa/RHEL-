@@ -222,4 +222,120 @@ ID | NAME            | PRODUCT   | CONTENT TYPE | URL
 ---|-----------------|-----------|--------------|------------------------------------------------------------
 [root@sat6 import]#
 
+##############
+[root@sat6 import]# hammer content-view create \
+>   --name "el7_content" \
+>   --description "Content view for CentOS 7"  --organization=Surrey
+Content view created.
+[root@sat6 import]#
+
+[root@sat6 import]# hammer product list
+Error: Could not find organization, please set one of options --organization, --organization-label, --organization-id.
+[root@sat6 import]# hammer product list  --organization=Surrey
+---|-----------|-------------------------------------------|--------------|--------------|------------------
+ID | NAME      | DESCRIPTION                               | ORGANIZATION | REPOSITORIES | SYNC STATE
+---|-----------|-------------------------------------------|--------------|--------------|------------------
+1  | el7_repos | Various repositories to use with CentOS 7 | Surrey       | 3            | Syncing Complete.
+---|-----------|-------------------------------------------|--------------|--------------|------------------
+[root@sat6 import]#
+
+
+[root@sat6 import]# for i in $(seq 1 16); do   hammer content-view add-repository   --name "el7_content"   --product "el7_repos"  --organization=Surrey    --repository-id "$i";   done
+The repository has been associated.
+The repository has been associated.
+The repository has been associated.
+
+
+ot@sat6 import]# hammer lifecycle-environment create \
+>   --name "stable" \
+>   --label "stable" \
+>   --prior "Library" --organization=Surrey
+Environment created.
+[root@sat6 import]#
+
+
+ot@sat6 import]#  hammer lifecycle-environment list
+---|---------|--------
+ID | NAME    | PRIOR
+---|---------|--------
+3  | Library |
+2  | Library |
+1  | Library |
+4  | stable  | Library
+---|---------|--------
+[root@sat6 import]#
+
+[root@sat6 import]# hammer content-view publish \
+>   --name "el7_content" \
+>   --description "Publishing repositories"  --organization=Surrey
+[.........................................................................................................................................................] [100%]
+{"content_view_id"=>4,
+ "content_view_version_id"=>4,
+ "composite_version_auto_published"=>[],
+ "composite_view_publish_failed"=>[],
+ "composite_auto_publish_task_id"=>[]}
+[root@sat6 import]#
+
+[root@sat6 import]# hammer content-view version list
+---|-------------------------------|---------|-----------------------
+ID | NAME                          | VERSION | LIFECYCLE ENVIRONMENTS
+---|-------------------------------|---------|-----------------------
+4  | el7_content 1.0               | 1.0     | Library
+3  | Default Organization View 1.0 | 1.0     | Library
+2  | Default Organization View 1.0 | 1.0     | Library
+1  | Default Organization View 1.0 | 1.0     | Library
+---|-------------------------------|---------|-----------------------
+[root@sat6 import]#
+
+
+ot@sat6 import]# hammer content-view version promote \
+>   --content-view "el7_content" \
+>   --version "1.0" \
+>   --to-lifecycle-environment "stable"  --organization=Surrey
+[.........................................................................................................................................................] [100%]
+[root@sat6 import]# hammer content-view version list
+---|-------------------------------|---------|-----------------------
+ID | NAME                          | VERSION | LIFECYCLE ENVIRONMENTS
+---|-------------------------------|---------|-----------------------
+4  | el7_content 1.0               | 1.0     | Library, stable
+3  | Default Organization View 1.0 | 1.0     | Library
+2  | Default Organization View 1.0 | 1.0     | Library
+1  | Default Organization View 1.0 | 1.0     | Library
+---|-------------------------------|---------|-----------------------
+[root@sat6 import]#
+
+
+ot@sat6 import]# hammer activation-key create \
+>   --name "el7-key" \
+>   --description "Key to use with CentOS7" \
+>   --lifecycle-environment "stable" \
+>   --content-view "el7_content" \
+>   --unlimited-hosts  --organization=Surrey
+Activation key created.
+[root@sat6 import]# hammer activation-key list
+Error: Could not find organization, please set one of options --organization, --organization-label, --organization-id.
+[root@sat6 import]# hammer activation-key list --organization=Surrey
+---|---------|----------------|-----------------------|-------------
+ID | NAME    | HOST LIMIT     | LIFECYCLE ENVIRONMENT | CONTENT VIEW
+---|---------|----------------|-----------------------|-------------
+1  | el7-key | 0 of Unlimited | stable                | el7_content
+---|---------|----------------|-----------------------|-------------
+[root@sat6 import]#
+
+
+ot@sat6 import]# hammer subscription list --organization=Surrey
+---|----------------------------------|-----------|----------|----------|---------|---------|---------------------|-----------|---------
+ID | UUID                             | NAME      | TYPE     | CONTRACT | ACCOUNT | SUPPORT | END DATE            | QUANTITY  | CONSUMED
+---|----------------------------------|-----------|----------|----------|---------|---------|---------------------|-----------|---------
+1  | 40280887666ddee801666e0066860005 | el7_repos | Physical |          |         |         | 2048/10/05 15:16:51 | Unlimited | 0
+---|----------------------------------|-----------|----------|----------|---------|---------|---------------------|-----------|---------
+[root@sat6 import]#
+
+[root@sat6 import]# hammer activation-key add-subscription \
+>   --name "el7-key" \
+>   --quantity "1" \
+>   --subscription-id "1"  --organization=Surrey
+Subscription added to activation key.
+[root@sat6 import]#
+
 
