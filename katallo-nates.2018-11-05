@@ -1,0 +1,79 @@
+root@katello# hammer auth status
+You are logged in as 'admin'
+
+root@katello# hammer organization list
+---|----------------------|-------------|----------------------|------------
+ID | NAME                 | DESCRIPTION | LABEL                | DESCRIPTION
+---|----------------------|-------------|----------------------|------------
+1  | Default Organization |             | Default_Organization |
+3  | MSA                  | MSA ORG     | MSA                  | MSA ORG
+---|----------------------|-------------|----------------------|------------
+root@katello# hammer --csv --csv-separator ";" organization list
+Id;Name;Description;Label;Description
+1;Default Organization;;Default_Organization;
+3;MSA;MSA ORG;MSA;MSA ORG
+root@katello#
+
+o
+t@katello# hammer ping
+candlepin:
+    Status:          ok
+    Server Response: Duration: 25ms
+candlepin_auth:
+    Status:          ok
+    Server Response: Duration: 29ms
+pulp:
+    Status:          FAIL
+    Server Response:
+pulp_auth:
+    Status: FAIL
+foreman_tasks:
+    Status:          ok
+    Server Response: Duration: 23ms
+
+root@katello#
+
+
+t@katello# hammer organization create --name "SAM" --description "SAM ORG Surrey"
+Organization created
+root@katello#
+
+
+
+root@katello#  hammer organization list
+---|----------------------|----------------|----------------------|---------------
+ID | NAME                 | DESCRIPTION    | LABEL                | DESCRIPTION
+---|----------------------|----------------|----------------------|---------------
+1  | Default Organization |                | Default_Organization |
+3  | MSA                  | MSA ORG        | MSA                  | MSA ORG
+4  | SAM                  | SAM ORG Surrey | SAM                  | SAM ORG Surrey
+---|----------------------|----------------|----------------------|---------------
+root@katello#
+
+
+t@katello# hammer location create --name surrey
+Location created
+root@katello#  hammer location  list
+---|------------------|------------
+ID | NAME             | DESCRIPTION
+---|------------------|------------
+2  | Default Location |
+5  | surrey           |
+---|------------------|------------
+root@katello#
+
+
+r: Could not find organization, please set one of options --organization, --organization-label, --organization-id.
+root@katello# hammer product list  --organization "SAM"
+---|------|-------------|--------------|--------------|-----------
+ID | NAME | DESCRIPTION | ORGANIZATION | REPOSITORIES | SYNC STATE
+---|------|-------------|--------------|--------------|-----------
+root@katello# hammer product list  --organization "MSA"
+---|----------|----------------|--------------|--------------|------------------
+ID | NAME     | DESCRIPTION    | ORGANIZATION | REPOSITORIES | SYNC STATE
+---|----------|----------------|--------------|--------------|------------------
+1  | CentOS 7 | Sync Base Repo | MSA          | 3            | Syncing Complete.
+---|----------|----------------|--------------|--------------|------------------
+root@katello#
+
+
